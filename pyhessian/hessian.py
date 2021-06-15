@@ -85,10 +85,10 @@ class hessian():
 
         THv = [torch.zeros(p.size()).to(device) for p in self.params
               ]  # accumulate result
-        for inputs, targets in self.data:
+        for inputs, targets, masks in self.data:
             self.model.zero_grad()
             tmp_num_data = inputs.size(0)
-            outputs = self.model(inputs.to(device))
+            outputs = self.model(inputs.to(device), masks.to(device))
             loss = self.criterion(outputs, targets.to(device))
             loss.backward(create_graph=True)
             params, gradsH = get_params_grad(self.model)
